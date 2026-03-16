@@ -87,10 +87,9 @@ func (tm *TaskManager) UpdateTitle(ctx context.Context, taskId int64, title stri
 		Title: title,
 	}, db.WithColumns("title"))
 
-	if err != nil || !ok {
-		if !ok {
-			return ErrTaskNotFound
-		}
+	if !ok {
+		return ErrTaskNotFound
+	} else if err != nil {
 		return fmt.Errorf("Failed to update task title: %w", err)
 	}
 	return nil
@@ -103,10 +102,9 @@ func (tm *TaskManager) UpdateDescription(ctx context.Context, taskId int64, desc
 		Description: &description,
 	}, db.WithColumns("description"))
 
-	if err != nil || !ok {
-		if !ok {
-			return ErrTaskNotFound
-		}
+	if !ok {
+		return ErrTaskNotFound
+	} else if err != nil {
 		return fmt.Errorf("Failed to update task description: %w", err)
 	}
 	return nil
@@ -126,24 +124,24 @@ func (tm *TaskManager) UpdateDeadLine(ctx context.Context, taskId int64, deadlin
 		IsDeadline: &isDeadline,
 	}, db.WithColumns("dead_line", "is_deadline"))
 
-	if err != nil || !ok {
-		if !ok {
-			return ErrTaskNotFound
-		}
+	if !ok {
+		return ErrTaskNotFound
+	} else if err != nil {
 		return fmt.Errorf("Failed to update task deadline: %w", err)
 	}
+
 	return nil
 }
 
 func (tm *TaskManager) DeleteTask(ctx context.Context, taskId int64) error {
 
 	ok, err := tm.tlRepo.DeleteTask(ctx, taskId)
-	if err != nil || !ok {
-		if !ok {
-			return ErrTaskNotFound
-		}
+	if !ok {
+		return ErrTaskNotFound
+	} else if err != nil {
 		return fmt.Errorf("Failed to delete task: %w", err)
 	}
+
 	return nil
 }
 
@@ -164,12 +162,12 @@ func (tm *TaskManager) UpdateStatus(ctx context.Context, taskId int64, statusId 
 		StatusID: statusId,
 	})
 
-	if err != nil || !ok {
-		if !ok {
-			return ErrTaskNotFound
-		}
+	if !ok {
+		return ErrTaskNotFound
+	} else if err != nil {
 		return fmt.Errorf("Failed to update task status: %w", err)
 	}
+
 	return nil
 
 }
