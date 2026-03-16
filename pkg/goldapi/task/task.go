@@ -60,11 +60,9 @@ func (tm *TaskManager) GetTaskByPeriod(ctx context.Context, userId int64, period
 		return ServicesTasks{}, ErrInvalidPersiods
 	}
 
-	dbTasks, err := tm.tlRepo.TasksByFilters(ctx, &db.TaskSearch{
-		UserID:       &userId,
-		DeadLineFrom: &periodStart,
-		DeadLineTo:   &periodEnd,
-	}, db.Pager{Page: 1, PageSize: 100})
+	dbTasks, err := tm.tlRepo.TasksByFilters(ctx, (&db.TaskSearch{
+		UserID: &userId,
+	}).WithDeadLineInPeriodOrNull(periodStart, periodEnd), db.Pager{Page: 1, PageSize: 100})
 	if err != nil {
 		return ServicesTasks{}, fmt.Errorf("Failed to get tasks by period: %w", err)
 	}
@@ -93,7 +91,6 @@ func (tm *TaskManager) UpdateDescription(ctx context.Context, taskId int64, desc
 		ID:          taskId,
 		Description: &description,
 	}, db.WithColumns(db.Columns.Task.Description))
-
 
 	if !ok {
 		return ErrTaskNotFound
