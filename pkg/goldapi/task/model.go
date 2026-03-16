@@ -14,14 +14,14 @@ type ServiceTask struct {
 	CreatedAt   time.Time
 }
 
-type Status struct {
+type ServiceStatus struct {
 	ID    int
 	Title string
 	Alias string
 }
 
 type Statuses struct {
-	Statuses []Status
+	Statuses []ServiceStatus
 }
 type ServicesTasks struct {
 	Tasks []ServiceTask

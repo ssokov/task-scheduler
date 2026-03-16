@@ -53,21 +53,21 @@ func (tm *TaskManager) CreateTask(ctx context.Context, task *ServiceTask) (int64
 }
 
 // TODO : добавить пагинацию
-func (tm *TaskManager) GetTaskByPeriod(ctx context.Context, userId int64, periodStart time.Time, periodEnd time.Time) (ServicesTasks, error) {
+func (tm *TaskManager) GetTaskByPeriod(ctx context.Context, userId int64, periodStart time.Time, periodEnd time.Time) (ServiceTaskList, error) {
 	tm.Log().Info("GetTaskByPeriod ...")
 
 	if periodStart.After(periodEnd) {
-		return ServicesTasks{}, ErrInvalidPersiods
+		return ServiceTaskList{}, ErrInvalidPersiods
 	}
 
 	dbTasks, err := tm.tlRepo.TasksByFilters(ctx, (&db.TaskSearch{
 		UserID: &userId,
 	}).WithDeadLineInPeriodOrNull(periodStart, periodEnd), db.Pager{Page: 1, PageSize: 100})
 	if err != nil {
-		return ServicesTasks{}, fmt.Errorf("Failed to get tasks by period: %w", err)
+		return ServiceTaskList{}, fmt.Errorf("Failed to get tasks by period: %w", err)
 	}
 
-	return newServicesTaskFromDB(dbTasks), nil
+	return NewServiceTaskList(dbTasks), nil
 }
 
 func (tm *TaskManager) UpdateTitle(ctx context.Context, taskId int64, title string) error {
@@ -135,14 +135,14 @@ func (tm *TaskManager) DeleteTask(ctx context.Context, taskId int64) error {
 	return nil
 }
 
-func (tm *TaskManager) GetStatuses(ctx context.Context) (Statuses, error) {
+func (tm *TaskManager) GetStatuses(ctx context.Context) (ServiceStatusList, error) {
 
 	dbStatuses, err := tm.tlRepo.TaskStatusesByFilters(ctx, nil, db.PagerDefault)
 	if err != nil {
-		return Statuses{}, fmt.Errorf("Failed to get task statuses: %w", err)
+		return ServiceStatusList{}, fmt.Errorf("Failed to get task statuses: %w", err)
 	}
 
-	return newStatusesFromDB(dbStatuses), nil
+	return NewServiceStatusList(dbStatuses), nil
 }
 
 func (tm *TaskManager) UpdateStatus(ctx context.Context, taskId int64, statusId int) error {

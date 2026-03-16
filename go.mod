@@ -26,6 +26,7 @@ require (
 require (
 	github.com/bbrks/go-blurhash v1.1.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/brianvoe/gofakeit/v7 v7.14.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/codemodus/kace v0.5.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.12 // indirect

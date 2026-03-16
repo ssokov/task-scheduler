@@ -40,20 +40,20 @@ func (ts *TaskService) CreateTask(ctx context.Context, req CreateTaskRequest) (C
 
 }
 
-func (ts *TaskService) GetTaskByPeriod(ctx context.Context, req GetTaskByPeriodRequest) (GetTaskByPeriodResponse, error) {
+func (ts *TaskService) GetTaskByPeriod(ctx context.Context, req GetTaskByPeriodRequest) (TaskResponseList, error) {
 	ts.Log().Info("GetTaskByPeriod ...")
 
 	if req.UserID <= 0 {
-		return GetTaskByPeriodResponse{}, zenrpc.NewError(zenrpc.InvalidParams, fmt.Errorf("User ID must be greater than 0, got %d", req.UserID))
+		return TaskResponseList{}, zenrpc.NewError(zenrpc.InvalidParams, fmt.Errorf("User ID must be greater than 0, got %d", req.UserID))
 	}
 
 	res, err := ts.taskManager.GetTaskByPeriod(ctx, req.UserID, req.PeriodStart, req.PeriodEnd)
 	if err != nil {
 		ts.Log().Error("Failed to get tasks by period", "err", err)
-		return GetTaskByPeriodResponse{}, mapRPCError(err)
+		return TaskResponseList{}, mapRPCError(err)
 	}
 
-	return newGetTaskByPeriodResponse(res), nil
+	return NewTaskResponseList(res), nil
 }
 
 func (ts *TaskService) UpdateTitle(ctx context.Context, req UpdateTitleRequest) error {
@@ -117,14 +117,14 @@ func (ts *TaskService) UpdateStatus(ctx context.Context, req UpdateStatusRequest
 	return nil
 }
 
-func (ts *TaskService) GetStatuses(ctx context.Context) (GetStatusesResponse, error) {
+func (ts *TaskService) GetStatuses(ctx context.Context) (StatusResponseList, error) {
 	ts.Log().Info("GetStatuses ...")
 
 	res, err := ts.taskManager.GetStatuses(ctx)
 	if err != nil {
 		ts.Log().Error("Failed to get task statuses", "err", err)
-		return GetStatusesResponse{}, mapRPCError(err)
+		return StatusResponseList{}, mapRPCError(err)
 	}
 
-	return newGetStatusesResponse(res), nil
+	return NewStatusResponseList(res), nil
 }

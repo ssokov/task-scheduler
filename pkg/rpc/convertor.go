@@ -17,36 +17,24 @@ func newCreateTaskResponse(taskId int64) CreateTaskResponse {
 	}
 }
 
-func newGetTaskByPeriodResponse(tasks tasks.ServicesTasks) GetTaskByPeriodResponse {
-	var taskResponses []TaskResponse
-	for _, t := range tasks.Tasks {
-		taskResponses = append(taskResponses, TaskResponse{
-			ID:          t.ID,
-			Title:       t.Title,
-			Description: t.Description,
-			IsDeadline:  t.IsDeadline,
-			Deadline:    t.DeadLine,
-			StatusID:    t.StatusID,
-			Name:        t.Name,
-			DeadLine:    t.DeadLine,
-			CreatedAt:   t.CreatedAt,
-		})
+func NewTaskResponse(dbTask tasks.ServiceTask) TaskResponse {
+	return TaskResponse{
+		ID:          dbTask.ID,
+		Title:       dbTask.Title,
+		Description: dbTask.Description,
+		IsDeadline:  dbTask.IsDeadline,
+		Deadline:    dbTask.DeadLine,
+		StatusID:    dbTask.StatusID,
+		Name:        dbTask.Name,
+		DeadLine:    dbTask.DeadLine,
+		CreatedAt:   dbTask.CreatedAt,
 	}
-	return GetTaskByPeriodResponse{Tasks: taskResponses}
 }
 
-func newStatusResponse(status tasks.Status) StatusResponse {
+func NewStatusResponse(dbStatus tasks.ServiceStatus) StatusResponse {
 	return StatusResponse{
-		ID:    status.ID,
-		Name:  status.Title,
-		Alias: status.Alias,
+		ID:    dbStatus.ID,
+		Name:  dbStatus.Title,
+		Alias: dbStatus.Alias,
 	}
-}
-
-func newGetStatusesResponse(statuses tasks.Statuses) GetStatusesResponse {
-	var statusResponses []StatusResponse
-	for _, s := range statuses.Statuses {
-		statusResponses = append(statusResponses, newStatusResponse(s))
-	}
-	return GetStatusesResponse{Statuses: statusResponses}
 }
