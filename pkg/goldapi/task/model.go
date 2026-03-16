@@ -23,3 +23,6 @@ type Status struct {
 type Statuses struct {
 	Statuses []Status
 }
+type ServicesTasks struct {
+	Tasks []ServiceTask
+}

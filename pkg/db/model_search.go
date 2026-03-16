@@ -235,6 +235,8 @@ type TaskSearch struct {
 	UserID           *int64
 	DeadLine         *time.Time
 	StatusID         *int
+	DeadLineFrom     *time.Time
+	DeadLineTo       *time.Time
 	IDs              []int64
 	TitleILike       *string
 	DescriptionILike *string
@@ -267,6 +269,12 @@ func (ts *TaskSearch) Apply(query *orm.Query) *orm.Query {
 	}
 	if ts.StatusID != nil {
 		ts.where(query, Tables.Task.Alias, Columns.Task.StatusID, ts.StatusID)
+	}
+	if ts.DeadLineFrom != nil {
+		Filter{Columns.Task.DeadLine, *ts.DeadLineFrom, SearchTypeGE, false}.Apply(query)
+	}
+	if ts.DeadLineTo != nil {
+		Filter{Columns.Task.DeadLine, *ts.DeadLineTo, SearchTypeLE, false}.Apply(query)
 	}
 	if len(ts.IDs) > 0 {
 		Filter{Columns.Task.ID, ts.IDs, SearchTypeArray, false}.Apply(query)

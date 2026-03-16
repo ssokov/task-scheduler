@@ -14,15 +14,21 @@ func newDBTask(st *ServiceTask, isDeadLine bool) *db.Task {
 }
 
 func newServiceTaskFromDB(dbTask db.Task) ServiceTask {
+	var userID int64
+	if dbTask.UserID != nil {
+		userID = *dbTask.UserID
+	}
+
 	return ServiceTask{
 		ID:          dbTask.ID,
-		UserId:      *dbTask.UserID,
+		UserId:      userID,
 		Title:       dbTask.Title,
 		Description: dbTask.Description,
 		StatusID:    dbTask.StatusID,
 		Name:        mapStatusIDToString(dbTask.StatusID),
 		IsDeadline:  dbTask.IsDeadline,
 		DeadLine:    dbTask.DeadLine,
+		CreatedAt:   dbTask.CreatedAt,
 	}
 }
 
@@ -49,4 +55,12 @@ func mapStatusIDToString(statusID int) string {
 	default:
 		return "unknown"
 	}
+}
+
+func newServicesTaskFromDB(dbTask []db.Task) ServicesTasks {
+	var tasks []ServiceTask
+	for _, dbTask := range dbTask {
+		tasks = append(tasks, newServiceTaskFromDB(dbTask))
+	}
+	return ServicesTasks{Tasks: tasks}
 }

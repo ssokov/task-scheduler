@@ -17,9 +17,9 @@ func newCreateTaskResponse(taskId int64) CreateTaskResponse {
 	}
 }
 
-func newGetTaskByPeriodResponse(tasks []tasks.ServiceTask) GetTaskByPeriodResponse {
+func newGetTaskByPeriodResponse(tasks tasks.ServicesTasks) GetTaskByPeriodResponse {
 	var taskResponses []TaskResponse
-	for _, t := range tasks {
+	for _, t := range tasks.Tasks {
 		taskResponses = append(taskResponses, TaskResponse{
 			ID:          t.ID,
 			Title:       t.Title,

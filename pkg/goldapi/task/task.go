@@ -52,32 +52,24 @@ func (tm *TaskManager) CreateTask(ctx context.Context, task *ServiceTask) (int64
 	return dbTask.ID, nil
 }
 
-func (tm *TaskManager) GetTaskByPeriod(ctx context.Context, userId int64, periodStart time.Time, periodEnd time.Time) ([]ServiceTask, error) {
+// TODO : добавить пагинацию
+func (tm *TaskManager) GetTaskByPeriod(ctx context.Context, userId int64, periodStart time.Time, periodEnd time.Time) (ServicesTasks, error) {
 	tm.Log().Info("GetTaskByPeriod ...")
 
 	if periodStart.After(periodEnd) {
-		return nil, ErrInvalidPersiods
+		return ServicesTasks{}, ErrInvalidPersiods
 	}
 
-	// TODO : добавить пагинацию
 	dbTasks, err := tm.tlRepo.TasksByFilters(ctx, &db.TaskSearch{
-		UserID: &userId,
+		UserID:       &userId,
+		DeadLineFrom: &periodStart,
+		DeadLineTo:   &periodEnd,
 	}, db.Pager{Page: 1, PageSize: 100})
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get tasks by period: %w", err)
-	}
-	// TODO: оптимизировать запросом к БД, чтобы сразу отфильтровать по дате, а не в коде
-	var tasks []ServiceTask
-	for _, dbTask := range dbTasks {
-		if dbTask.DeadLine != nil && (dbTask.DeadLine.Before(periodStart) || dbTask.DeadLine.After(periodEnd)) {
-			continue
-		} else {
-			tasks = append(tasks, newServiceTaskFromDB(dbTask))
-		}
-
+		return ServicesTasks{}, fmt.Errorf("Failed to get tasks by period: %w", err)
 	}
 
-	return tasks, nil
+	return newServicesTaskFromDB(dbTasks), nil
 }
 
 func (tm *TaskManager) UpdateTitle(ctx context.Context, taskId int64, title string) error {
