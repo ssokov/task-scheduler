@@ -1,0 +1,1 @@
+ALTER TABLE tasks ADD COLUMN statusId int4 NOT NULL DEFAULT 0;

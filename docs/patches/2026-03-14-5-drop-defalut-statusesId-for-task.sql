@@ -1,0 +1,2 @@
+ALTER Table tasks
+ALTER COLUMN statusId DROP DEFAULT;

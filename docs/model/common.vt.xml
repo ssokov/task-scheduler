@@ -1,0 +1,30 @@
+<VTNamespace xmlns:xsi="" xmlns:xsd="">
+    <Name>common</Name>
+    <VTEntities>
+        <Entity Name="Task" Mode="Full">
+            <TerminalPath>tasks</TerminalPath>
+            <Attributes>
+                <Attribute Name="ID" AttrName="ID" SearchName="ID" Summary="true" Search="true" Max="0" Min="0" Required="false" Validate=""></Attribute>
+                <Attribute Name="Title" AttrName="Title" SearchName="TitleILike" Summary="true" Search="true" Max="255" Min="0" Required="true" Validate=""></Attribute>
+                <Attribute Name="Description" AttrName="Description" SearchName="DescriptionILike" Summary="true" Search="true" Max="255" Min="0" Required="false" Validate=""></Attribute>
+                <Attribute Name="CreatedAt" AttrName="CreatedAt" SearchName="CreatedAt" Summary="true" Search="true" Max="0" Min="0" Required="true" Validate=""></Attribute>
+                <Attribute Name="IsDeadline" AttrName="IsDeadline" SearchName="IsDeadline" Summary="true" Search="true" Max="0" Min="0" Required="false" Validate=""></Attribute>
+                <Attribute Name="UserID" AttrName="UserID" SearchName="UserID" Summary="true" Search="true" Max="0" Min="0" Required="false" Validate=""></Attribute>
+                <Attribute Name="DeadLine" AttrName="DeadLine" SearchName="DeadLine" Summary="true" Search="true" Max="0" Min="0" Required="false" Validate=""></Attribute>
+                <Attribute Name="StatusID" AttrName="StatusID" SearchName="StatusID" Summary="true" Search="true" Max="0" Min="0" Required="true" Validate="status"></Attribute>
+                <Attribute Name="IDs" SearchName="IDs" Summary="false" Search="true" Max="0" Min="0" Required="false" Validate=""></Attribute>
+            </Attributes>
+            <Template>
+                <Attribute Name="Title" VTAttrName="Title" List="true" Form="HTML_INPUT" Search="HTML_INPUT"></Attribute>
+                <Attribute Name="Description" VTAttrName="Description" List="true" Form="HTML_INPUT" Search="HTML_INPUT"></Attribute>
+                <Attribute Name="CreatedAt" VTAttrName="CreatedAt" List="true" Form="HTML_DATETIME" Search="HTML_DATETIME"></Attribute>
+                <Attribute Name="IsDeadline" VTAttrName="IsDeadline" List="true" Form="HTML_CHECKBOX" Search="HTML_CHECKBOX"></Attribute>
+                <Attribute Name="UserID" VTAttrName="UserID" List="false" FKOpts="login" Form="HTML_INPUT" Search="HTML_INPUT"></Attribute>
+                <Attribute Name="User" VTAttrName="UserID" List="true" FKOpts="login" Form="" Search="HTML_NONE"></Attribute>
+                <Attribute Name="DeadLine" VTAttrName="DeadLine" List="true" Form="HTML_DATETIME" Search="HTML_DATETIME"></Attribute>
+                <Attribute Name="StatusID" VTAttrName="StatusID" List="true" Form="HTML_INPUT" Search="HTML_INPUT"></Attribute>
+                <Attribute Name="IDs" VTAttrName="IDs" List="false" Form="HTML_NONE" Search="HTML_SELECT"></Attribute>
+            </Template>
+        </Entity>
+    </VTEntities>
+</VTNamespace>

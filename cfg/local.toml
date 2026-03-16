@@ -1,0 +1,16 @@
+[Server]
+Host      = "localhost"
+Port      = 8085
+IsDevel   = true
+EnableVFS = true
+
+[Database]
+Addr            = "localhost:5432"
+User            = "mikhail"
+Database        = "task_planner"
+Password        = ""
+PoolSize        = 5
+ApplicationName = "apisrv"
+
+
+

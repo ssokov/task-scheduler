@@ -1,0 +1,1 @@
+ALTER TABLE tasks ADD COLUMN dead_line timestamp with time zone;
