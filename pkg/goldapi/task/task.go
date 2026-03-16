@@ -43,7 +43,7 @@ func (tm *TaskManager) CreateTask(ctx context.Context, task *ServiceTask) (int64
 
 	dbTask := newDBTask(task, isDeadLine)
 
-	dbTask, err := tm.tlRepo.AddTask(ctx, dbTask, db.WithoutColumns("created_at"))
+	dbTask, err := tm.tlRepo.AddTask(ctx, dbTask, db.WithoutColumns(db.Columns.Task.CreatedAt))
 	if err != nil {
 		tm.Log().Error("Failed to add task")
 		return -1, fmt.Errorf("Failed to add task: %w", err)
@@ -77,7 +77,7 @@ func (tm *TaskManager) UpdateTitle(ctx context.Context, taskId int64, title stri
 	ok, err := tm.tlRepo.UpdateTask(ctx, &db.Task{
 		ID:    taskId,
 		Title: title,
-	}, db.WithColumns("title"))
+	}, db.WithColumns(db.Columns.Task.Title))
 
 	if !ok {
 		return ErrTaskNotFound
@@ -92,7 +92,8 @@ func (tm *TaskManager) UpdateDescription(ctx context.Context, taskId int64, desc
 	ok, err := tm.tlRepo.UpdateTask(ctx, &db.Task{
 		ID:          taskId,
 		Description: &description,
-	}, db.WithColumns("description"))
+	}, db.WithColumns(db.Columns.Task.Description))
+
 
 	if !ok {
 		return ErrTaskNotFound
@@ -114,7 +115,7 @@ func (tm *TaskManager) UpdateDeadLine(ctx context.Context, taskId int64, deadlin
 		ID:         taskId,
 		DeadLine:   &deadline,
 		IsDeadline: &isDeadline,
-	}, db.WithColumns("dead_line", "is_deadline"))
+	}, db.WithColumns(db.Columns.Task.DeadLine, db.Columns.Task.IsDeadline))
 
 	if !ok {
 		return ErrTaskNotFound
